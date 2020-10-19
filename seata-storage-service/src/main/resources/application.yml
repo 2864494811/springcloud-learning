@@ -4,16 +4,13 @@ spring:
   application:
     name: seata-storage-service
   cloud:
-    alibaba:
-      seata:
-        tx-service-group: fsp_tx_group
     nacos:
       discovery:
         server-addr: localhost:8848
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    password: root
-    url: jdbc:mysql://localhost:3306/seat-storage
+    password: 123456
+    url: jdbc:mysql://localhost:3306/seata-storage
     username: root
 logging:
   level:
@@ -21,3 +18,32 @@ logging:
       seata: info
 mybatis:
   mapperLocations: classpath:mapper/*.xml
+
+seata:
+  # 开启自动装配
+  enabled: true
+  # 本客户端的微服务名称
+  application-id: seata-storage-service
+  # 读取哪个事务分组
+  # 例如此时会读取 SEATA_GROUP 这个分组下的 service.vgroupMapping.my_test_tx_group 这个属性的值。从上面的配置可以知道笔者此处的最终值为 testCluster。后面程序运行会找到 testCluster 这个集群的seata服务端，进行通讯。
+  tx-service-group: fsp_tx_group
+  enable-auto-data-source-proxy: false
+  # 配置中心设置
+  config:
+    type: nacos
+    nacos:
+      username: nacos
+      password: nacos
+      server-addr: localhost:8848
+      # 读取的配置分组
+      group: SEATA_GROUP
+      namespace: 2a806a7d-566a-4f9d-be5a-03fe7c770565
+  # 注册中心设置
+  registry:
+    type: nacos
+    nacos:
+      # SEATA服务中心的微服务名，此处与服务端保持一致
+      application: seata-server
+      server-addr: localhost:8848
+      username: nacos
+      password: nacos

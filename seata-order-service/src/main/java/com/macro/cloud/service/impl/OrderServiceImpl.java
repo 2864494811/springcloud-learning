@@ -46,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
         LOGGER.info("------->order-service中扣减余额开始");
         accountService.decrease(order.getUserId(),order.getMoney());
         LOGGER.info("------->order-service中扣减余额结束");
-
+        int i = 1/0;
         //修改订单状态为已完成
         LOGGER.info("------->order-service中修改订单状态开始");
         orderDao.update(order.getUserId(),0);

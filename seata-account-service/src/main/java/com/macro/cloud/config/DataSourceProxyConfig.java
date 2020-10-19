@@ -27,11 +27,22 @@ public class DataSourceProxyConfig {
         return new DruidDataSource();
     }
 
-    @Bean
+    @Bean(name = "dataSource")
+    @Primary
     public DataSourceProxy dataSourceProxy(DataSource dataSource) {
         return new DataSourceProxy(dataSource);
     }
 
+    /**
+     * 如果这里去掉sqlSessionFactory
+     * 可以直接让DataSource bean返回的是一个被代理过的bean,
+     * 并且我们加入了@Primary,导致mp优先使用我们配置的数据源,
+     * 这样就解决了mp因为seata代理了数据源跟创建了新的sqlSessionFactory,
+     * 导致mp的插件,组件失效的bug了!
+     * @param dataSourceProxy
+     * @return
+     * @throws Exception
+     */
     @Bean
     public SqlSessionFactory sqlSessionFactoryBean(DataSourceProxy dataSourceProxy) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
